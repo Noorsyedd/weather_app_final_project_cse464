@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:weather_today_completed/utils/constants.dart';
 import '../utils/custom_paint.dart';
 import 'city_screen.dart';
+import 'loading_screen.dart';
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key, this.locationWeather});
+  var locationWeather;
 
-  final locationWeather;
+  LocationScreen({super.key, this.locationWeather});
+
 
   @override
   LocationScreenState createState() => LocationScreenState();
@@ -18,7 +20,7 @@ class LocationScreenState extends State<LocationScreen> {
   int maxTemperature = 0;
   double windSpeed = 0.0;
   int humidity = 50;
-  String cityName = "Dhaka";
+  String cityName = "";
 
 
   @override
@@ -86,23 +88,28 @@ class LocationScreenState extends State<LocationScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () async {},
-                      child: Image.asset(
-                        'images/ic_current_location.png',
-                        width: 32.0,
-                      ),
-                    ),
-                    const SizedBox(width: 24.0),
-                    GestureDetector(
-                      onTap: () {
-                        cityName = Navigator.push(
+                      onTap: () async {
+                        final selectedCity = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) {
                               return const CityScreen();
                             },
                           ),
-                        ) as String;
+                        );
+
+                        if (selectedCity != null) {
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoadingScreen(
+                                fromPage: 'city',
+                                cityName: selectedCity,
+                              ),
+                            ),
+                          );
+                        }
                       },
                       child: Image.asset(
                         'images/ic_search.png',

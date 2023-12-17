@@ -62,6 +62,7 @@ class _CityScreenState extends State<CityScreen> {
                 ),
                 onPressed: () {
                   Navigator.pop(context, cityName);
+
                 },
                 child: const Text(
                   'Search Weather',
